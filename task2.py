@@ -40,7 +40,7 @@ class Task():
         distance = delta_y+delta_x+delta_z
 
         reward = 1-distance*0.04
-        
+
         #reward = - min(delta_z,20)
         #reward = 1- 0.003*distance
         #reward = np.tanh(reward)
