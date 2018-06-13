@@ -27,24 +27,24 @@ class Critic:
 
 
         # Add hidden layer(s) for state pathway
-        net_states = layers.Dense(units=300,kernel_regularizer=layers.regularizers.l2(1e-6))(states)
+        net_states = layers.Dense(units=512,kernel_regularizer=layers.regularizers.l2(1e-6))(states)
         net_states = layers.BatchNormalization()(net_states)
         net_states = layers.Activation("relu")(net_states)
 
-        net_states = layers.Dense(units=600, kernel_regularizer=layers.regularizers.l2(1e-6))(net_states)
+        net_states = layers.Dense(units=256, kernel_regularizer=layers.regularizers.l2(1e-6))(net_states)
         net_states = layers.BatchNormalization()(net_states)
         net_states = layers.Activation("linear")(net_states)
 
         # Add hidden layer(s) for action pathway
-        net_actions = layers.Dense(units=600,kernel_regularizer=layers.regularizers.l2(1e-6))(actions)
+        net_actions = layers.Dense(units=256,kernel_regularizer=layers.regularizers.l2(1e-6))(actions)
         net_actions = layers.BatchNormalization()(net_actions)
         net_actions = layers.Activation("linear")(net_actions)
 
 
         # Combine state and action pathways
         net = layers.Add()([net_states, net_actions])
-        net = layers.Dense(units=600,kernel_regularizer=layers.regularizers.l2(1e-6))(net)
-        net = layers.Activation('relu')(net)
+        #net = layers.Dense(units=600,kernel_regularizer=layers.regularizers.l2(1e-6))(net)
+        #net = layers.Activation('relu')(net)
 
         # Add final output layer to prduce action values (Q values)
         xavier = layers.initializers.glorot_uniform()

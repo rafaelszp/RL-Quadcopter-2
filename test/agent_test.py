@@ -1,7 +1,5 @@
 import sys
 import unittest
-import pandas as pd
-from agents.policy_search import PolicySearch_Agent
 from task2 import Task
 import numpy as np
 from agents.agent import DDPGAgent
@@ -9,7 +7,7 @@ from agents.agent import DDPGAgent
 class DDPGTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.num_episodes = 50
+        self.num_episodes = 500
 
         target_pos = np.array([0., 0., 10.])
         init_pose = np.array([0., 0., 10., 0., 0., 0.])  # initial pose
@@ -37,7 +35,7 @@ class DDPGTestCase(unittest.TestCase):
                 pos = self.task.sim.pose[:3]
                 velocity = self.task.sim.v.mean()
                 if done:
-                    print("\rEpisode = {:4d}, score = {:7.3f} (best = {:7.3f}) (reward = {:7.3f})".format(
-                        i_episode, self.agent.score, self.agent.best_score,reward), end="")
+                    print("\rEpisode = {:4d}, score = {:7.3f} (best = {:7.3f}) (worst = {:7.3f}) (reward = {:7.3f})".format(
+                        i_episode, self.agent.score, self.agent.best_score,self.agent.worst_score,reward), end="")
                     break
             sys.stdout.flush()

@@ -27,14 +27,14 @@ class DDPGAgent():
         self.actor_target.model.set_weights(self.actor_local.model.get_weights())
 
         # Noise process
-        self.exploration_mu = 0
-        self.exploration_theta = 0.15
+        self.exploration_mu = .5 #0
+        self.exploration_theta = 0.6 #0.15
         self.exploration_sigma = 0.3
         self.noise = OUNoise(self.action_size, self.exploration_mu, self.exploration_theta, self.exploration_sigma)
 
         # Replay memory
-        self.buffer_size = 100000
-        self.batch_size = 32
+        self.buffer_size = 1000000
+        self.batch_size = 64
         self.memory = ReplayBuffer(self.buffer_size, self.batch_size)
 
         # Algorithm parameters
