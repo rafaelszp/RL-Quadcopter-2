@@ -28,27 +28,38 @@ class Task():
 
     def get_reward(self):
         """Uses current pose of sim to return reward."""
-        #reward = np.tanh(1.-.3*(abs(self.sim.pose[:3] - self.target_pos)).sum())
 
-        sigmoid = lambda x: 1./(np.exp(-x))
-        delta_x = abs(self.sim.pose[0] - self.target_pos[0])
-        delta_y = abs(self.sim.pose[1] - self.target_pos[1])
-        delta_z = abs(self.sim.pose[2] - self.target_pos[2])
+        #sigmoid = lambda x: 1./(np.exp(-x))
+        delta_x = np.tanh(abs(self.sim.pose[0] - self.target_pos[0]))
+        delta_y = np.tanh(abs(self.sim.pose[1] - self.target_pos[1]))
+        delta_z = np.tanh(abs(self.sim.pose[2] - self.target_pos[2]))
 
-        angular_v = sigmoid(self.sim.angular_v.mean())
-        velocity = self.sim.v.mean()
-        distance = delta_z#+delta_x+delta_y
+        target_z = self.target_pos[2]
+        pos_z = self.sim.pose[2]
 
-        #velocity_discount = (1-max(velocity,0.1)**(1/(max(distance,0.1))))
-        angular_v_discount = (1-max(angular_v,0.1)**(1/(max(distance,0.1))))
+        distance = delta_y+delta_x+delta_z
+
+        reward = 1-distance*0.04
+        
+        #reward = - min(delta_z,20)
+        #reward = 1- 0.003*distance
+        #reward = np.tanh(reward)
+        #if pos_z>=target_z:
+
+        # #print(delta_z,reward,self.sim.pose[2] )
+        # if(reward>0):
+        #     reward = max(reward,-10)
+        # if reward < 0:
+        #     reward = min(reward,10)
+
+        #penalty_multiplier = .001
+        #reward = reward - (1-penalty_multiplier * delta_y) - (1-penalty_multiplier * delta_x)
+        #reward = np.tanh(reward) - 0.03*delta_z
+        #reward = np.tanh(1 - 0.003 * (abs(self.sim.pose[2] - self.target_pos[2]))).sum()
+
+        return reward
 
 
-        reward = 1 - (distance)*0.252
-        reward = reward - (0.001 * delta_x) if delta_x > 0 else reward
-        reward = reward - (0.001 * delta_y) if delta_y > 0 else reward
-        reward = reward - 0.001*angular_v
-
-        return np.tanh(reward)
 
     def step(self, rotor_speeds):
         """Uses action to obtain next state, reward, done."""

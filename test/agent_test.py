@@ -34,9 +34,10 @@ class DDPGTestCase(unittest.TestCase):
                 self.agent.best_score = max(self.agent.best_score, self.agent.score)
                 self.agent.worst_score = min(self.agent.worst_score, self.agent.score)
                 angular_v = self.task.sim.angular_v.mean()
+                pos = self.task.sim.pose[:3]
                 velocity = self.task.sim.v.mean()
                 if done:
-                    print("\rEpisode = {:4d}, score = {:7.3f} (best = {:7.3f}) (angular = {:7.3f}) (velocity = {:7.3f})".format(
-                        i_episode, self.agent.score, self.agent.best_score,angular_v,velocity), end="")
+                    print("\rEpisode = {:4d}, score = {:7.3f} (best = {:7.3f}) (pos = {})".format(
+                        i_episode, self.agent.score, self.agent.best_score,pos), end="")
                     break
             sys.stdout.flush()
