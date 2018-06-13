@@ -2,7 +2,7 @@ import sys
 import unittest
 import pandas as pd
 from agents.policy_search import PolicySearch_Agent
-from task import Task
+from task2 import Task
 import numpy as np
 from agents.agent import DDPGAgent
 
