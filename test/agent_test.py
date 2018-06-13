@@ -9,9 +9,16 @@ from agents.agent import DDPGAgent
 class DDPGTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.num_episodes = 50
-        self.target_pos = np.array([0., 0., 10.])
-        self.task = Task(target_pos=self.target_pos)
+        self.num_episodes = 500
+
+        target_pos = np.array([0., 0., 10.])
+        init_pose = np.array([0., 0., 10., 0., 0., 0.])  # initial pose
+        init_velocities = np.array([0., 0., 0.])  # initial velocities
+        init_angle_velocities = np.array([0., 0., 0.])  # initial angle velocities
+
+        self.task = Task(init_pose=init_pose,init_velocities=init_velocities,
+                         init_angle_velocities=init_angle_velocities,
+                         target_pos=target_pos)
         self.agent = DDPGAgent(self.task)
 
     def test_train(self):
@@ -26,8 +33,10 @@ class DDPGTestCase(unittest.TestCase):
                 self.agent.score += reward
                 self.agent.best_score = max(self.agent.best_score, self.agent.score)
                 self.agent.worst_score = min(self.agent.worst_score, self.agent.score)
+                angular_v = self.task.sim.angular_v.mean()
+                velocity = self.task.sim.v.mean()
                 if done:
-                    print("\rEpisode = {:4d}, score = {:7.3f} (best = {:7.3f})".format(
-                        i_episode, self.agent.score, self.agent.best_score), end="")
+                    print("\rEpisode = {:4d}, score = {:7.3f} (best = {:7.3f}) (angular = {:7.3f}) (velocity = {:7.3f})".format(
+                        i_episode, self.agent.score, self.agent.best_score,angular_v,velocity), end="")
                     break
             sys.stdout.flush()
