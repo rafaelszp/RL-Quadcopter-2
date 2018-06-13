@@ -38,8 +38,19 @@ class Task():
         pos_z = self.sim.pose[2]
 
         distance = delta_y+delta_x+delta_z
+        velocity = self.sim.v.sum()
 
-        reward = 1-distance*0.04
+        velocity = 0 if np.isnan(velocity) else velocity #dealing with nan
+        angular_v = self.sim.angular_v.sum()
+        angular_v = 0 if np.isnan(angular_v) else angular_v
+
+        reward = 1-(distance*0.4)
+        vel_discount = (1-max(velocity,0.1))*(1/max(distance,0.1))
+        ang_discount = (1-max(angular_v,0.1))*(1/max(distance,0.1))
+        reward *= vel_discount
+        reward *= ang_discount
+
+
 
         #reward = - min(delta_z,20)
         #reward = 1- 0.003*distance

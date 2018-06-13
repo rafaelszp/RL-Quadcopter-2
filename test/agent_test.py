@@ -9,7 +9,7 @@ from agents.agent import DDPGAgent
 class DDPGTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.num_episodes = 500
+        self.num_episodes = 50
 
         target_pos = np.array([0., 0., 10.])
         init_pose = np.array([0., 0., 10., 0., 0., 0.])  # initial pose
@@ -37,7 +37,7 @@ class DDPGTestCase(unittest.TestCase):
                 pos = self.task.sim.pose[:3]
                 velocity = self.task.sim.v.mean()
                 if done:
-                    print("\rEpisode = {:4d}, score = {:7.3f} (best = {:7.3f}) (pos = {})".format(
-                        i_episode, self.agent.score, self.agent.best_score,pos), end="")
+                    print("\rEpisode = {:4d}, score = {:7.3f} (best = {:7.3f}) (reward = {:7.3f})".format(
+                        i_episode, self.agent.score, self.agent.best_score,reward), end="")
                     break
             sys.stdout.flush()
