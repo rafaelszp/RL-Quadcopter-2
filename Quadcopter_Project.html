@@ -12500,8 +12500,16 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Reflections">Reflections<a class="anchor-link" href="#Reflections">&#182;</a></h2><p><strong>Question 1</strong>: Describe the task that you specified in <code>task.py</code>.  How did you design the reward function?</p>
-<p><strong>Answer</strong>:</p>
+<h2 id="Reflections">Reflections<a class="anchor-link" href="#Reflections">&#182;</a></h2><p><strong>Question 1</strong>: Describe the task that you specified in <code>task2.py</code>.  How did you design the reward function?</p>
+<p><strong>Answer</strong>:
+At first I noticed that the default reward function was making the agent act erractic. So I tried to minimize this behavior applying tanh to each value of the current pos before sum in order to measure the distance, the performance was a little bit better, but just a bit, because the inconsistent behavior was gone but left room for almost non learning.</p>
+<p>So I tried lots of these aproaches:</p>
+<ul>
+<li>Tried to apply discounted rewards using angular_v mean values: The score gone to sky high, but erractic behavior was times 1e6 bigger. So I gave up understanding how to treat euler angles for now;</li>
+<li>Tried to punish bigger distances( delta bigger than 10), but the agent wasn't making the network learn properly, besides more negatives rewards was happening turning the final score a total disaster;</li>
+<li>Tried to apply <a href="https://bons.ai/blog/deep-reinforcement-learning-models-tips-tricks-for-writing-reward-functions">https://bons.ai/blog/deep-reinforcement-learning-models-tips-tricks-for-writing-reward-functions</a> reward smoothing. It was hard to understand how to calculate the right way, so I figured out that the distance from the desired position was a sum of 3 axis(x,y,z) so in some way I had to normalize it summing all up  and dividing by 3. The agent started to learn and scores went to around 100</li>
+<li>At last I figured out that the RPM was too high, so I set the action_high to  half of the default value. With this last modification my score attained around 285 score</li>
+</ul>
 
 </div>
 </div>
